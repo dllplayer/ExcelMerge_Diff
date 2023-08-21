@@ -44,6 +44,17 @@ namespace ExcelMerge.GUI.ViewModels
             }
         }
 
+        private string defSheetName;
+        public string DefSheetName
+        {
+            get { return defSheetName; }
+            set
+            {
+                SetProperty(ref defSheetName, value);
+                UpdateExecutableFlag();
+            }
+        }
+
         private List<string> srcSheetNames;
         public List<string> SrcSheetNames
         {
@@ -122,12 +133,14 @@ namespace ExcelMerge.GUI.ViewModels
 
             SrcPath = string.Empty;
             DstPath = string.Empty;
+            DefSheetName = string.Empty;
         }
 
-        public DiffViewModel(string src, string dst, MainWindowViewModel mwv) : this()
+        public DiffViewModel(string src, string dst, string defSheetName, MainWindowViewModel mwv) : this()
         {
             SrcPath = src;
             DstPath = dst;
+            DefSheetName = defSheetName;
 
             mwv.PropertyChanged += Mwv_PropertyChanged;
         }
@@ -216,7 +229,23 @@ namespace ExcelMerge.GUI.ViewModels
             if (existsSrc)
             {
                 SrcSheetNames = ExcelWorkbook.GetSheetNames(SrcPath).ToList();
-                SelectedSrcSheetIndex = 0;
+                
+                if (DefSheetName == string.Empty)
+                {
+                    SelectedSrcSheetIndex = 0;
+                }
+                else
+                {
+                    SelectedSrcSheetIndex = 0;
+                    for (int i = 0; i < SrcSheetNames.Count; i++)
+                    {
+                        if (SrcSheetNames[i] == DefSheetName)
+                        {
+                            SelectedSrcSheetIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
@@ -227,7 +256,23 @@ namespace ExcelMerge.GUI.ViewModels
             if (existsDst)
             {
                 DstSheetNames = ExcelWorkbook.GetSheetNames(DstPath).ToList();
-                SelectedDstSheetIndex = 0;
+                
+                if (DefSheetName == string.Empty)
+                {
+                    SelectedDstSheetIndex = 0;
+                }
+                else
+                {
+                    SelectedDstSheetIndex = 0;
+                    for (int i = 0; i < DstSheetNames.Count; i++)
+                    {
+                        if (DstSheetNames[i] == DefSheetName)
+                        {
+                            SelectedDstSheetIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
             else
             {

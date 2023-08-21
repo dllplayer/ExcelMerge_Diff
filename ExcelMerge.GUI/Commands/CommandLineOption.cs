@@ -35,6 +35,9 @@ namespace ExcelMerge.GUI.Commands
         [Option('k', "keep-file-history")]
         public bool KeepFileHistory { get; set; }
 
+        [Option('n', "def-sheet-name")]
+        public string DefSheetName { get; set; } = string.Empty;
+
 
         public CommandType MainCommand
         {
